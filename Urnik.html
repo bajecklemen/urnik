@@ -1,0 +1,256 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <title>Urnik</title>
+   <script type="text/javascript" src="data.js"></script>
+   <script>  
+    function izprazni(){
+	
+     for (var i=0; i < 10; i++){
+        for (var j=1; j < 6; j++){
+            var ime = j.toString() + i;
+            okence = document.getElementById(ime);
+            okence.innerHTML = '';
+        }    
+      }   
+    }
+    function razred_select(){
+        var s = document.getElementById('razr');
+        genrazredi(s[s.selectedIndex].value);
+        s.selectedIndex = 0;
+    }
+    function genrazredi(r){
+        izprazni();
+        var n = podatki.length;
+        var ime;
+        var okence;
+        var a;
+        for (var i=0;i<n;i++){
+          if (podatki[i][1] == r){
+              ime =  podatki[i][5].toString()+podatki[i][6];            
+              okence = document.getElementById(ime);
+              a = podatki[i][3]+ ' <a href="javascript:genucilnice(\''+ podatki[i][4] +'\');">' + podatki[i][4]+' </a> <a href="javascript:genucitelji(\''+ podatki[i][2] +'\');">'+podatki[i][2]+'</a> <br>' ;
+              okence.innerHTML += a;
+              document.getElementById("kaj").innerHTML = r;
+          }        
+        }     
+    }
+    function ucitelj_select(){
+        var s = document.getElementById('ucit');
+        genucitelji(s[s.selectedIndex].value);
+        s.selectedIndex = 0;
+    }
+    function genucitelji(r){
+        izprazni();
+        var n = podatki.length;
+        var ime;
+        var okence;
+        var a;
+        for (var i=0;i<n;i++){
+          if (podatki[i][2] == r){
+              ime =  podatki[i][5].toString()+podatki[i][6].toString(); 
+              okence = document.getElementById(ime);
+              a = '<a href="javascript:genrazredi(\''+ podatki[i][1] +'\');"> ' + podatki[i][1]+' </a>'+ podatki[i][3]+ ' <a href="javascript:genucilnice(\''+ podatki[i][4] +'\');">'+podatki[i][4]+'</a> ' ;
+              okence.innerHTML = a;
+              document.getElementById("kaj").innerHTML = r;
+          }
+        }     
+    }
+    function ucilnica_select(){
+        var s = document.getElementById('ucil');
+        genucilnice(s[s.selectedIndex].value);
+        s.selectedIndex = 0;
+    }    
+    function genucilnice(r){
+        izprazni();
+        var n = podatki.length;
+        var ime;
+        var okence;
+        var a;
+        for (var i=0;i<n;i++){
+          if (podatki[i][4] == r){
+              ime =  podatki[i][5].toString()+podatki[i][6];           
+              okence = document.getElementById(ime);
+               a = '<a href="javascript:genrazredi(\''+ podatki[i][1] +'\');"> ' + podatki[i][1]+' </a>'+ podatki[i][3]+ ' <a href="javascript:genucitelji(\''+ podatki[i][2] +'\');">'+podatki[i][2]+'</a> ' ;
+              okence.innerHTML = a;
+              document.getElementById("kaj").innerHTML = r;
+          }        
+        }     
+    } 
+    
+    function proste_ucilnice(){
+      izprazni();
+      var ime;
+      var okence;
+      var vsebina;
+      var prosta;
+      for (var dan=1;dan<6;dan++){
+        for (ura=1;ura<10;ura++){
+           vsebina = '';
+           for (uc in ucilnice){
+              prosta = true;
+              for (p in podatki){
+                 if (podatki[p][4] == ucilnice[uc] && podatki[p][5] == dan && podatki[p][6] == ura){
+                    prosta=false;
+                    break;
+                 }
+                 
+              }
+              if (prosta && ucilnice[uc] != 'TV1' && ucilnice[uc] != 'TV2' && ucilnice[uc] != 'TV3') {vsebina = vsebina + ' <a href="javascript:genucilnice(\''+ ucilnice[uc] +'\');">'+ucilnice[uc]+'</a> ';}
+           
+           }
+           ime = dan.toString() + ura;
+           okence = document.getElementById(ime);
+           okence.innerHTML = vsebina;
+           document.getElementById("kaj").innerHTML = 'Proste učilnice';
+        }
+      
+      }
+    
+    } 
+	
+	
+								
+								
+  </script>
+  <style type=text/css>
+
+      #skatla{
+        margin-top:30px;
+        width:900px;
+        margin-left:auto;
+        margin-right:auto;		
+      }
+	  #divurnik {
+		width:900px;
+		float:left;
+	}
+      #meni{
+        height:35px;
+        text-align:center;
+		
+      }
+      #divucitelji, #divrazredi, #divucilnice, #kaj, #divprosteucilnice{
+        width:19%;
+        float:left;
+		font-size:large;        
+      }
+	  
+      #kaj{
+        font-weight:bold;
+        font-size:x-large;
+      }
+      .okence, .ura{
+        width:160px;
+        float:left;
+        height:48px;
+        border:1px outset;
+        margin:3px;
+        background-color:rgb(255,255,153);
+        text-align:center;
+        overflow:auto;
+		padding-top:10px;
+		font-size:large;
+      }
+	  .ura {
+		width:35px;
+	  }
+      a {
+        text-decoration:none;
+        color:rgb(102,0,0);
+      }
+	  #noga{
+		clear:both;
+	  }
+	  
+  </style>
+ </head>
+ <body>
+  <div id="skatla">
+  <div id="meni">
+  <div id="kaj">
+      URNIK
+  </div>
+  <div id="divucitelji">
+  <select name="ucit" id="ucit" onChange="setTimeout(ucitelj_select,0);">
+  <option select="selected" >Izberi učitelja ...</option>
+  <script type="text/javascript">
+    ucitelji.sort();
+    var n = ucitelji.length;
+    for (var i=0; i < n; i++){
+      document.write('<option>'+ucitelji[i]+'</option>');
+    }
+  </script>
+  </select>
+  </div>
+  
+   <div id="divrazredi">
+  <select name="razr" id="razr" onChange="setTimeout(razred_select,0);">
+  <option select="selected" >Izberi razred ...</option>
+  <script type="text/javascript">
+    razredi.sort();
+    var n = razredi.length;
+    for (var i=0; i < n; i++){
+      document.write('<option>'+razredi[i]+'</option>');    
+    }
+  </script>
+  </select>
+  </div>  
+   <div id="divucilnice">
+  <select name="ucil" id="ucil" onChange="setTimeout(ucilnica_select,0);">
+  <option select="selected" >Izberi učilnico ...</option>
+  <script type="text/javascript">
+    ucilnice.sort();
+    var n = ucilnice.length;
+    for (var i=0; i < n; i++){
+      document.write('<option>'+ucilnice[i]+'</option>');
+    }
+  </script>
+  </select>
+  </div>
+    
+   <div id="divprosteucilnice">
+  <input type="button" value="Proste učilnice" name="proste" onClick="proste_ucilnice();">
+  </div>
+  
+ </div>
+  
+  <div id="divurnik">
+
+  <script type="text/javascript">
+   
+    for (var i=-1; i < 10; i++){
+      for (var j=0; j < 6; j++){
+        var ime = j.toString() + i; 
+		if (j == 0){
+			document.write('<div class="ura" id="'+ime+'"></div>');
+		}else{
+			document.write('<div class="okence" id="'+ime+'"></div>');
+		}
+      }
+    }
+    for (var i = 1;i<9;i++){
+      okence = document.getElementById('0'+i);
+      okence.innerHTML = i.toString();
+    }
+	document.getElementById('00').innerHTML = 'pu';
+    document.getElementById('0-1').innerHTML = 'ura';
+    document.getElementById('1-1').innerHTML = 'PONEDELJEK';
+    document.getElementById('2-1').innerHTML = 'TOREK';
+    document.getElementById('3-1').innerHTML = 'SREDA';
+    document.getElementById('4-1').innerHTML = 'ČETRTEK';
+    document.getElementById('5-1').innerHTML = 'PETEK';
+    
+  </script>
+  
+  <div id='noga'>&copy; Klemen 2019</div>
+	
+  </div>
+
+ </body>
+</html>
